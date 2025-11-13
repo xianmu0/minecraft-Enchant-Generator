@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的世界附魔指令生成器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="page">
+        <header class="output-bar">
+            <input id="command-output" class="command-field" type="text" placeholder="请先选择物品..." readonly>
+            <button id="copy-btn" class="copy-btn" type="button">复制指令</button>
+        </header>
+        <section class="workspace">
+            <aside class="pane item-pane">
+                <h2 class="pane-title">物品 / 工具</h2>
+                <div id="item-list" class="item-list"></div>
+            </aside>
+            <section class="pane enchant-pane">
+                <h2 class="pane-title">附魔效果与等级</h2>
+                <div id="enchant-list" class="enchant-list"></div>
+            </section>
+        </section>
+    </main>
+
+    <template id="enchant-row-template">
+        <div class="enchant-row">
+            <span class="enchant-name"></span>
+            <div class="enchant-dropdown">
+                <button type="button" class="dropdown-toggle">无</button>
+                <div class="dropdown-menu"></div>
+            </div>
+        </div>
+    </template>
+
+    <script src="script.js" defer></script>
+</body>
+</html>

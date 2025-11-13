@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+    color-scheme: dark;
+    font-family: "Press Start 2P", "Minecraft", "Microsoft YaHei", "PingFang SC", sans-serif;
+    --bg: #0a0f16;
+    --grid-line: rgba(120, 200, 255, 0.18);
+    --surface: #172235;
+    --surface-bright: #1f2f4a;
+    --surface-dark: #0f1726;
+    --accent: #42f3ff;
+    --accent-strong: #76ffe4;
+    --accent-dark: #1bc6d0;
+    --text-main: #f2f8ff;
+    --text-sub: rgba(226, 241, 255, 0.72);
+    --border: rgba(107, 209, 255, 0.35);
+    --shadow: 0 18px 0 rgba(13, 31, 53, 0.45);
+}
+
+* {
+    box-sizing: border-box;
+    image-rendering: pixelated;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg);
+    background-image:
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(145deg, rgba(33, 68, 116, 0.35), rgba(8, 14, 24, 0.9));
+    background-size: 32px 32px, 32px 32px, 100% 100%;
+    color: var(--text-main);
+    padding: 32px 0 48px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(66, 243, 255, 0.12), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(118, 255, 228, 0.12), transparent 50%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+.page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.output-bar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 18px 20px;
+    border: 4px solid var(--border);
+    border-radius: 20px;
+    background: linear-gradient(145deg, var(--surface), var(--surface-bright));
+    box-shadow: var(--shadow);
+}
+
+.command-field {
+    flex: 1;
+    border: 4px solid rgba(66, 243, 255, 0.25);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(145deg, rgba(19, 35, 59, 0.95), rgba(10, 17, 35, 0.95));
+    color: var(--text-main);
+    text-shadow: 0 0 6px rgba(66, 243, 255, 0.6);
+    outline: none;
+}
+
+.command-field::placeholder {
+    color: rgba(179, 215, 255, 0.4);
+}
+
+.copy-btn {
+    min-width: 168px;
+    border: 4px solid rgba(23, 47, 74, 0.9);
+    border-radius: 14px;
+    padding: 16px 22px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    background: linear-gradient(145deg, var(--accent-dark), var(--accent));
+    color: #0a1321;
+    cursor: pointer;
+    box-shadow: 0 10px 0 rgba(9, 21, 36, 0.8);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.15s ease;
+}
+
+.copy-btn:hover {
+    filter: brightness(1.05);
+}
+
+.copy-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 6px 0 rgba(9, 21, 36, 0.65);
+}
+
+.workspace {
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) minmax(380px, 1.2fr);
+    gap: 24px;
+}
+
+.pane {
+    border: 4px solid var(--border);
+    border-radius: 22px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-height: 540px;
+    background: linear-gradient(160deg, var(--surface-bright), var(--surface-dark));
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: visible;
+}
+
+.pane::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(66, 243, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(rgba(66, 243, 255, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.pane-title {
+    margin: 0;
+    font-size: 15px;
+    color: var(--accent-strong);
+    text-shadow: 0 0 10px rgba(66, 243, 255, 0.65);
+}
+
+.item-list {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    position: relative;
+    z-index: 1;
+}
+
+.item-btn {
+    border: 4px solid rgba(66, 243, 255, 0.18);
+    border-radius: 14px;
+    padding: 14px 12px;
+    background: linear-gradient(160deg, rgba(17, 30, 52, 0.95), rgba(11, 21, 35, 0.95));
+    color: var(--text-main);
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 8px 0 rgba(6, 13, 22, 0.9);
+}
+
+.item-btn:hover {
+    border-color: rgba(118, 255, 228, 0.6);
+    transform: translateY(-2px);
+}
+
+.item-btn.is-selected {
+    background: linear-gradient(150deg, rgba(27, 142, 154, 0.74), rgba(17, 54, 97, 0.95));
+    border-color: rgba(118, 255, 228, 0.82);
+    color: var(--accent-strong);
+    box-shadow: 0 10px 0 rgba(6, 16, 25, 0.95);
+}
+
+.enchant-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.enchant-list::-webkit-scrollbar {
+    width: 12px;
+}
+
+.enchant-list::-webkit-scrollbar-track {
+    background: rgba(14, 25, 40, 0.8);
+    border-radius: 12px;
+}
+
+.enchant-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(66, 243, 255, 0.65), rgba(27, 198, 208, 0.9));
+    border-radius: 12px;
+    border: 3px solid rgba(10, 19, 33, 0.8);
+}
+
+.enchant-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 12px;
+    border: 3px solid rgba(66, 243, 255, 0.08);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    background: linear-gradient(150deg, rgba(17, 35, 56, 0.9), rgba(12, 23, 39, 0.92));
+    box-shadow: 0 6px 0 rgba(8, 16, 26, 0.85);
+    position: relative;
+}
+
+.enchant-row:last-child {
+    margin-bottom: 0;
+}
+
+.enchant-name {
+    flex: 1;
+    font-size: 11px;
+    color: var(--text-sub);
+    letter-spacing: 0.5px;
+}
+
+.enchant-dropdown {
+    position: relative;
+    min-width: 160px;
+    filter: drop-shadow(0 10px 0 rgba(6, 16, 27, 0.75));
+    z-index: 1;
+}
+
+.dropdown-toggle {
+    width: 100%;
+    border: 4px solid rgba(66, 243, 255, 0.38);
+    border-radius: 14px;
+    padding: 12px 46px 12px 16px;
+    font-size: 11px;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    background:
+        linear-gradient(150deg, rgba(17, 34, 58, 0.94), rgba(7, 14, 25, 0.94)) padding-box,
+        linear-gradient(120deg, rgba(118, 255, 228, 0.45), rgba(66, 243, 255, 0.2)) border-box;
+    box-shadow:
+        0 6px 0 rgba(7, 14, 23, 0.9),
+        inset 0 0 0 4px rgba(6, 18, 32, 0.85),
+        inset 0 0 14px rgba(66, 243, 255, 0.3);
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s ease, transform 0.1s ease;
+}
+
+.dropdown-toggle::after {
+    content: "";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 10px;
+    background:
+        linear-gradient(135deg, rgba(66, 243, 255, 0.85), rgba(118, 255, 228, 0.9));
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    filter: drop-shadow(0 0 6px rgba(66, 243, 255, 0.6));
+}
+
+.dropdown-toggle:hover {
+    border-color: rgba(118, 255, 228, 0.65);
+}
+
+.dropdown-toggle:active {
+    transform: translateY(2px);
+}
+
+.enchant-dropdown.is-open {
+    z-index: 200;
+}
+
+.enchant-dropdown.is-open .dropdown-toggle {
+    border-color: rgba(118, 255, 228, 0.8);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 180px;
+    padding: 10px;
+    border-radius: 16px;
+    border: 4px solid rgba(118, 255, 228, 0.55);
+    background: linear-gradient(155deg, rgba(18, 36, 60, 0.96), rgba(8, 18, 32, 0.94));
+    box-shadow:
+        0 20px 0 rgba(6, 16, 29, 0.82),
+        0 0 22px rgba(66, 243, 255, 0.18);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-12px) scaleY(0.95);
+    transform-origin: top right;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    backdrop-filter: blur(6px);
+    z-index: 5;
+}
+
+.dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: 24px;
+    width: 18px;
+    height: 12px;
+    background:
+        linear-gradient(135deg, rgba(118, 255, 228, 0.65), rgba(66, 243, 255, 0.4));
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    filter: drop-shadow(0 0 8px rgba(66, 243, 255, 0.45));
+}
+
+.enchant-dropdown.is-open .dropdown-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scaleY(1);
+    z-index: 300;
+}
+
+.dropdown-item {
+    width: 100%;
+    margin: 4px 0;
+    border: 3px solid rgba(66, 243, 255, 0.25);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: rgba(210, 235, 255, 0.88);
+    text-align: left;
+    text-transform: uppercase;
+    background: linear-gradient(145deg, rgba(15, 30, 48, 0.92), rgba(9, 18, 32, 0.92));
+    box-shadow: inset 0 0 0 2px rgba(12, 24, 38, 0.82);
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.dropdown-item:hover {
+    border-color: rgba(118, 255, 228, 0.55);
+    color: var(--accent-strong);
+    transform: translateX(-2px);
+}
+
+.dropdown-item.is-active {
+    border-color: rgba(118, 255, 228, 0.85);
+    color: var(--accent);
+    box-shadow:
+        inset 0 0 0 2px rgba(12, 24, 38, 0.82),
+        inset 0 0 12px rgba(118, 255, 228, 0.35);
+}
+
+.dropdown-item:first-child {
+    margin-top: 0;
+}
+
+.dropdown-item:last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+    body {
+        padding: 24px 0 36px;
+    }
+
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .pane {
+        min-height: auto;
+    }
+
+    .enchant-list {
+        max-height: 520px;
+    }
+}
+
+@media (max-width: 680px) {
+    .page {
+        padding: 0 16px;
+        gap: 18px;
+    }
+
+    .output-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .copy-btn {
+        width: 100%;
+    }
+}
